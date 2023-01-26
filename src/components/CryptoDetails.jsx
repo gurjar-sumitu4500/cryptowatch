@@ -20,6 +20,7 @@ import {
   useGetCryptoHistoryQuery,
 } from "../services/cryptoApi";
 import LineChart from "./LineChart";
+import Loader from "./Loader";
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -34,7 +35,7 @@ const CryptoDetails = () => {
   });
   const cryptoDetails = data?.data?.coin;
 
-  if (isFetching) return "Loading.....";
+  if (isFetching) return <Loader />;
 
   const time = ["3h", "24h", "7d", "30d", "1y", "3m", "3y", "5y"];
 
@@ -121,9 +122,7 @@ const CryptoDetails = () => {
         placeholder="Select Timeperiod"
         onChange={(value) => setTimeperiod(value)}
       >
-        {time.map((date) => (
-          <Option key={date}>{date}</Option>
-        ))}
+        {time?.length && time.map((date) => <Option key={date}>{date}</Option>)}
       </Select>
       {/* <LineChart coinHistory={coinHistory} currentPrice={millify(cryptoDetails?.price)} coinName={cryptoDetails?.name} /> */}
       <LineChart
@@ -142,15 +141,16 @@ const CryptoDetails = () => {
               as the base and quote currency, the rank, and trading volume.
             </p>
           </Col>
-          {stats.map(({ icon, title, value }) => (
-            <Col className="coin-stats">
-              <Col className="coin-stats-name">
-                <Text>{icon}</Text>
-                <Text>{title}</Text>
+          {stats?.length &&
+            stats.map(({ icon, title, value }) => (
+              <Col className="coin-stats">
+                <Col className="coin-stats-name">
+                  <Text>{icon}</Text>
+                  <Text>{title}</Text>
+                </Col>
+                <Text className="stats">{value}</Text>
               </Col>
-              <Text className="stats">{value}</Text>
-            </Col>
-          ))}
+            ))}
         </Col>
         <Col className="other-stats-info">
           <Col className="coin-value-statistics-heading">
@@ -162,15 +162,16 @@ const CryptoDetails = () => {
               as the base and quote currency, the rank, and trading volume.
             </p>
           </Col>
-          {genericStats.map(({ icon, title, value }) => (
-            <Col className="coin-stats">
-              <Col className="coin-stats-name">
-                <Text>{icon}</Text>
-                <Text>{title}</Text>
+          {genericStats?.length &&
+            genericStats.map(({ icon, title, value }) => (
+              <Col className="coin-stats">
+                <Col className="coin-stats-name">
+                  <Text>{icon}</Text>
+                  <Text>{title}</Text>
+                </Col>
+                <Text className="stats">{value}</Text>
               </Col>
-              <Text className="stats">{value}</Text>
-            </Col>
-          ))}
+            ))}
         </Col>
       </Col>
       <Col className="coin-desc-link">
@@ -182,18 +183,19 @@ const CryptoDetails = () => {
         </Row>
         <Col className="coin-links">
           <Title level={3} className="coin-details-heading">
-            {cryptoDetails.name} Links
+            {cryptoDetails?.name} Links
           </Title>
-          {cryptoDetails.links?.map((link) => (
-            <Row className="coin-link" key={link.name}>
-              <Title level={5} className="link-name">
-                {link.type}
-              </Title>
-              <a href={link.url} target="_blank" rel="noreferrer">
-                {link.name}
-              </a>
-            </Row>
-          ))}
+          {cryptoDetails?.links?.length &&
+            cryptoDetails?.links?.map((link) => (
+              <Row className="coin-link" key={link.name}>
+                <Title level={5} className="link-name">
+                  {link.type}
+                </Title>
+                <a href={link.url} target="_blank" rel="noreferrer">
+                  {link.name}
+                </a>
+              </Row>
+            ))}
         </Col>
       </Col>
     </Col>
